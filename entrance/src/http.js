@@ -21,6 +21,7 @@ http.interceptors.request.use(function (config) {
 
 // 全局捕获错误
 // 使用axios 拦截器
+// Element 注册了一个$message方法用于调用，Message 可以接收一个字符串或一个 VNode 作为参数，它会被显示为正文内容。
 http.interceptors.response.use(res => {
     return res
 }, err => {
