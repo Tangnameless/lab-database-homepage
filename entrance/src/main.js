@@ -5,6 +5,9 @@ import './plugins/element.js'
 
 Vue.config.productionTip = false
 
+import http from './http'
+Vue.prototype.$http = http
+
 new Vue({
   router,
   render: h => h(App)

@@ -43,10 +43,11 @@ export default {
   },
   methods: {
     async login() {
-      // const res = await this.$http.post('login', this.model);
+      // 根据ZAS接口使用，用户名与密码存放在headers中
+      const res = await this.$http.post('login', undefined, {headers: this.model});
       // sessionStorage.token = res.data.token;
-      // localStorage.token = res.data.token;
-      localStorage.token = "abc"; //假装获取到一个token
+      localStorage.token = res.data.token;
+      // localStorage.token = "abc"; //假装获取到一个token
       this.$router.push("/");
       this.$message({
         type: "success",

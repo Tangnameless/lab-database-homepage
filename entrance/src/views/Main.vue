@@ -74,6 +74,7 @@ export default {
 
   methods: {
     // 获取当前登录用户信息
+    // 需要一个接口，根据本地的token，返回当前用户名
     async fetchUser() {
       const res = await this.$http.post("/userinfo");
       this.model = Object.assign({}, this.model, res.data);
@@ -86,7 +87,7 @@ export default {
         cancelButtonText: "取消",
         type: "warning",
       }).then(async () => {
-        window.localStorage.removeItem("token");
+        window.localStorage.removeItem("token"); // 退出时清空token
         this.$message({
           type: "success",
           message: "成功退出!",
