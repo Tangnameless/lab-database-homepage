@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <p>实验室风采展示</p>
     <div id="banner">
       <!--动态将图片轮播图的容器高度设置成与图片一致-->
       <el-carousel :height="bannerHeight + 'px'" type="card">
