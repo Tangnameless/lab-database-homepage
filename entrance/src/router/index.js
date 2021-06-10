@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Main from '../views/Main.vue'
 import Login from '../views/Login.vue'
+import Register from '../views/Register.vue'
 
 import System1 from '../views/System1.vue'
 import System2 from '../views/System2.vue'
@@ -12,8 +13,9 @@ import DashBoard from '../views/DashBoard.vue'
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/login', name: "login", component: Login, meta: { isPublic: true } }, // 目前只有login页面可以不登陆而访问
-
+  // 目前只有login和rigister页面可以不登陆而访问
+  { path: '/login', name: "login", component: Login, meta: { isPublic: true } }, 
+  { path: '/register', name: "register", component: Register, meta: { isPublic: true } },
   {
     path: '/',
     redirect: '/dashboard',
