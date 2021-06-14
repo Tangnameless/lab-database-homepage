@@ -16,6 +16,9 @@
               <el-form-item label="用户名称" prop="username">
                 <el-input v-model="ruleForm.username"></el-input>
               </el-form-item>
+              <el-form-item prop="email" label="邮箱">
+                <el-input v-model="ruleForm.email"></el-input>
+              </el-form-item>
 
               <el-form-item label="密码" prop="password">
                 <el-input
@@ -87,6 +90,7 @@ export default {
     return {
       ruleForm: {
         username: "",
+        email: "",
         password: "",
         checkPass: "",
         role: "",
@@ -99,6 +103,18 @@ export default {
             max: 10,
             message: "长度在 3 到 10 个字符",
             trigger: "blur",
+          },
+        ],
+        email: [
+          {
+            required: true,
+            message: "请输入邮箱地址",
+            trigger: "blur",
+          },
+          {
+            type: "email",
+            message: "请输入正确的邮箱地址",
+            trigger: ["blur", "change"],
           },
         ],
         password: [{ validator: validatePass, trigger: "blur" }],
@@ -131,11 +147,11 @@ export default {
     async register() {
       // 根据ZAS接口使用，用户名与密码, 与signupID存放在headers中
       let info = {
-          username: this.ruleForm.username,
-          password: this.ruleForm.password,
-          signupId: this.ruleForm.role,
+        username: this.ruleForm.username,
+        password: this.ruleForm.password,
+        signupId: this.ruleForm.role,
       };
-      await this.$http.post('/auth/signup', undefined, {headers: info});
+      await this.$http.post("/auth/signup", undefined, { headers: info });
       this.$message({
         type: "success",
         message: "登陆成功",

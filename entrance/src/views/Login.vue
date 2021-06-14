@@ -5,7 +5,15 @@
         <div>
           <div class="login-title">欢迎使用实验室数据管理系统</div>
           <el-card header="请先登录" class="login-card">
-            <el-form @submit.native.prevent="login">
+            <el-form
+              :model="model"
+              @submit.native.prevent="submitForm('ruleForm')"
+              :rules="rules"
+              ref="ruleForm"
+              status-icon
+              :label-position="right"
+              label-width="80px"
+            >
               <el-form-item label="用户名">
                 <el-input
                   prefix-icon="el-icon-user-solid"
@@ -22,10 +30,15 @@
                 >
                 </el-input>
               </el-form-item>
+              <el-form-item label="验证码" prop="input_validcode" size="mini">
+                <el-input v-model="model.input_validcode"></el-input>
+                <valid-code :value.sync="model.true_validcode"></valid-code>
+              </el-form-item>
               <el-form-item>
                 <el-button type="primary" native-type="submit">登录</el-button>
 
-                <el-link class="register-link" @click="handleClick">前往注册</el-link
+                <el-link class="register-link" @click="handleClick"
+                  >前往注册</el-link
                 >
               </el-form-item>
             </el-form>
@@ -38,13 +51,48 @@
 </template>
 
 <script>
+import ValidCode from "@/components/ValidCode.vue";
 export default {
+  components: {
+    ValidCode,
+  },
   data() {
+    var validateCode = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入验证码！"));
+      } else if (value !== this.model.true_validcode) {
+        callback(new Error("验证码错误！"));
+      } else {
+        callback();
+      }
+    };
     return {
-      model: {},
+      model: {
+        input_validcode: "",
+        true_validcode: "",
+      },
+      rules: {
+        input_validcode: [{ validator: validateCode, trigger: "blur" }],
+      },
     };
   },
   methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          // 前端成功验证数据格式，发送后端登录接口
+          alert("submit!");
+          this.login();
+        } else {
+          this.$message({
+            type: "warning",
+            message: "验证码有误",
+          });
+          return false;
+        }
+      });
+    },
+
     async login() {
       // 根据ZAS接口使用，用户名与密码存放在headers中
       // const res = await this.$http.post('/auth/signin', undefined, {headers: this.model});
@@ -59,8 +107,8 @@ export default {
     },
 
     async handleClick() {
-      this.$router.push('/register');
-    }
+      this.$router.push("/register");
+    },
   },
 };
 </script>
