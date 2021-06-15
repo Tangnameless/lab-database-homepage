@@ -71,6 +71,8 @@ export default {
     };
     return {
       model: {
+        username: "",
+        password: "",
         input_validcode: "",
         true_validcode: "",
       },
@@ -96,21 +98,55 @@ export default {
       });
     },
 
-    async login() {
+    login() {
       // 根据ZAS接口使用，用户名与密码存放在headers中
-      // const res = await this.$http.post('/auth/signin', undefined, {headers: this.model});
-      // sessionStorage.token = res.data.token;
-      // localStorage.token = res.data.token;
-      localStorage.token = "abc"; //假装获取到一个token
-      this.$router.push("/");
-      this.$message({
-        type: "success",
-        message: "登陆成功",
-      });
+      this.$http
+        .post("/auth/signin", undefined, {
+          headers: {
+            username: this.model.username,
+            password: this.model.password,
+          },
+        })
+        .then(response => {
+          if (response.data === "SUCCESS") {
+            localStorage.token = response.headers["authorization"];
+            this.$router.push("/");
+            this.$message({
+              type: "success",
+              message: "登陆成功",
+            });
+          } else {
+            throw { msg: response.data, response: response };
+          }
+        });
     },
 
-    async handleClick() {
+    handleClick() {
       this.$router.push("/register");
+    },
+
+    handleError(error, fail) {
+      if (error.response && error.response.signin) {
+        localStorage.token = undefined;
+      } else if (error.msg) {
+        fail(
+          `被后台积极拒绝，原因：${error.msg}，请F12检查console并发给管理员YZ。`
+        );
+        console.log(error.response);
+      } else if (error.response) {
+        fail(
+          `未正确加载，状态码${error.response.status}，请F12检查console并发给管理员CZB。`
+        );
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        fail(`请求发送失败，请F12检查console并发给管理员YZ。`);
+        console.log(error.request);
+      } else {
+        fail(`网络错误，请重试。`);
+        console.log("Error", error.message);
+      }
     },
   },
 };

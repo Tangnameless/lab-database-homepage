@@ -1,0 +1,19 @@
+@url = http://47.93.49.119:8925
+
+
+
+### 注册
+POST {{url}}/auth/signup 
+username: "test1"
+password: "123456"
+signupId: "93b6a64d-2878-4f9c-be67-0bcc0cde08ae"
+
+
+### 登录
+POST {{url}}/auth/signin
+username: "test2"
+password: "123456"
+
+
+### 根据token返回用户名
+GET {{url}}/token/username/eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiW10iLCJleHAiOjE2MjQzNjY0MzMsImlhdCI6MTYyMzc2MTYzMywidXNlcm5hbWUiOiJ0ZXN0MiJ9.nOYdEXs2Mhz3T-2UUFzZ50pdmR2tWJjjwa-I6LY9mFE

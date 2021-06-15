@@ -52,6 +52,8 @@ export default {
     ])
   },
   created() {
+    // 根据token获取用户名
+    // 获取用户邮箱认证状态
     this.getUser()
   },
   methods: {

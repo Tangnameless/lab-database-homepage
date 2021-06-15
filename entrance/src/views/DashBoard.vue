@@ -4,7 +4,7 @@
       <!--动态将图片轮播图的容器高度设置成与图片一致-->
       <el-carousel :height="bannerHeight + 'px'" type="card">
         <!--遍历图片地址,动态生成轮播图-->
-        <el-carousel-item v-for="item in img_list" :key="item">
+        <el-carousel-item v-for="item in img_list" :key="item.index">
           <img :src="item.src" alt="" />
         </el-carousel-item>
       </el-carousel>
@@ -37,14 +37,14 @@ export default {
     return {
       // 图片地址数组
       img_list: [
-        { src: require("../assets/images/banner_1.jpg") },
-        { src: require("../assets/images/banner_2.jpg") },
-        { src: require("../assets/images/banner_3.jpg") },
-        { src: require("../assets/images/banner_4.jpg") },
-        { src: require("../assets/images/banner_5.jpg") },
-        { src: require("../assets/images/banner_6.jpg") },
-        { src: require("../assets/images/banner_7.jpg") },
-        { src: require("../assets/images/banner_8.jpg") },
+        { index: 1, src: require("../assets/images/banner_1.jpg") },
+        { index: 2, src: require("../assets/images/banner_2.jpg") },
+        { index: 3, src: require("../assets/images/banner_3.jpg") },
+        { index: 4, src: require("../assets/images/banner_4.jpg") },
+        { index: 5, src: require("../assets/images/banner_5.jpg") },
+        { index: 6, src: require("../assets/images/banner_6.jpg") },
+        { index: 7, src: require("../assets/images/banner_7.jpg") },
+        { index: 8, src: require("../assets/images/banner_8.jpg") },
       ],
       // 图片父容器高度
       bannerHeight: 1000,

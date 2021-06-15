@@ -77,10 +77,9 @@
                   v-model="ruleForm2.role"
                   placeholder="请选择注册用户的角色"
                 >
-                  <el-option label="管理员" value="signup id 1"></el-option>
-                  <el-option label="普通用户1" value="signup id 2"></el-option>
-                  <el-option label="普通用户2" value="signup id 3"></el-option>
-                  <el-option label="普通用户3" value="signup id 4"></el-option>
+                  <el-option label="学生" value="93b6a64d-2878-4f9c-be67-0bcc0cde08ae"></el-option>
+                  <el-option label="教师" value="1e1beaed-e374-4c4c-8244-7d521ee6fb40"></el-option>
+                  <el-option label="咱不可用" value=""></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item>
@@ -215,7 +214,13 @@ export default {
       this.$refs[formName].resetFields();
     },
     // 根据ZAS接口使用, 验证邮箱
-    async sendEmail() {},
+    // 向指定邮箱发送验证邮件
+    // 如果邮箱已被注册验证，则返回EXIST,否则PASS
+    async sendEmail() {
+      let email = this.ruleForm1.email;
+      let username = this.ruleForm2.username;
+      await this.$http.post(`/email/send?email=${email}&username=${username}`);
+    },
     async register() {
       // 根据ZAS接口使用，用户名与密码, 与signupID存放在headers中
       let info = {

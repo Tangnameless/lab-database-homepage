@@ -40,8 +40,7 @@
               style="margin-right: 15px; font-size: 20px; color: #ffffff"
             ></i>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item
-                @click.native="$router.push(`/userinfo`)"
+              <el-dropdown-item @click.native="$router.push(`/userinfo`)"
                 >查看个人资料</el-dropdown-item
               >
               <el-dropdown-item @click.native="logout()"
@@ -63,6 +62,8 @@
 </template>
 
 <script>
+import handleError from "@/utils/conector";
+
 export default {
   data() {
     return {
@@ -76,8 +77,16 @@ export default {
     // 获取当前登录用户信息
     // 需要一个接口，根据本地的token，返回当前用户名
     async fetchUser() {
-      const res = await this.$http.post("/userinfo");
-      this.model = Object.assign({}, this.model, res.data);
+      var token = localStorage.token;
+      token = String(token).split(" ").pop();
+      console.log(token);
+
+      this.$http
+        .get(`/token/username/${token}`)
+        .then((res) => {
+          this.$set(this.model, "username", res.data);
+        })
+        .catch((error) => handleError(error, (msg) => console.error(msg)));
     },
 
     // 用户登出
@@ -94,6 +103,30 @@ export default {
         });
         this.$router.push(`/login`);
       });
+    },
+
+    handleError(error, fail) {
+      if (error.response && error.response.signin) {
+        localStorage.token = undefined;
+      } else if (error.msg) {
+        fail(
+          `被后台积极拒绝，原因：${error.msg}，请F12检查console并发给管理员YZ。`
+        );
+        console.log(error.response);
+      } else if (error.response) {
+        fail(
+          `未正确加载，状态码${error.response.status}，请F12检查console并发给管理员CZB。`
+        );
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        fail(`请求发送失败，请F12检查console并发给管理员YZ。`);
+        console.log(error.request);
+      } else {
+        fail(`网络错误，请重试。`);
+        console.log("Error", error.message);
+      }
     },
   },
 

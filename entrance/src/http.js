@@ -5,16 +5,18 @@ import router from './router/index'
 
 const http = axios.create({
     // 连接ZAS服务器获取token
-    // baseURL: 'http://localhost:3000'
-    baseURL: 'https://oneapp.2linkq.com/zas/'
+    // baseURL: 'http://oneapp.2linkq.com/zas'
+    // ZAS IP:47.93.49.119:8925
+    baseURL: 'http://47.93.49.119:8925'
 })
 
 // 添加请求拦截器
 http.interceptors.request.use(function (config) {
     // 在发送请求之前,为每个请求的headers加上token
-    if (localStorage.token) {
-        config.headers.Authorization = 'Bearer ' + localStorage.token;
-    }
+    // header加上token请求相应用户名会报错
+    // if (localStorage.token) {
+    //     config.headers['Authorization'] = localStorage.token;
+    // }
     return config;
 }, function (error) {
     // 对请求错误做些什么
@@ -27,10 +29,11 @@ http.interceptors.request.use(function (config) {
 http.interceptors.response.use(res => {
     return res
 }, err => {
-    if (err.response.data.message) {
+    console.log(err);
+    if (err.response.data) {
         Vue.prototype.$message({
             type: 'error',
-            message: err.response.data.message
+            message: err.response.data
         })
 
         // 如果捕获错误状态码401，说明未授权，跳转至登录页面
