@@ -41,7 +41,7 @@
             ></i>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
-                @click.native="$router.push(`/admin_users/edit/${model._id}`)"
+                @click.native="$router.push(`/userinfo`)"
                 >查看个人资料</el-dropdown-item
               >
               <el-dropdown-item @click.native="logout()"

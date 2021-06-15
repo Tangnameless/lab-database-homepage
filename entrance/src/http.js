@@ -5,7 +5,8 @@ import router from './router/index'
 
 const http = axios.create({
     // 连接ZAS服务器获取token
-    baseURL: 'http://localhost:3000'
+    // baseURL: 'http://localhost:3000'
+    baseURL: 'https://oneapp.2linkq.com/zas/'
 })
 
 // 添加请求拦截器

@@ -107,7 +107,7 @@ export default {
         ],
         email: [
           {
-            required: true,
+            // required: true,
             message: "请输入邮箱地址",
             trigger: "blur",
           },

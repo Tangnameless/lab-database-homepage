@@ -10,12 +10,15 @@ import System3 from '../views/System3.vue'
 import System4 from '../views/System4.vue'
 import DashBoard from '../views/DashBoard.vue'
 
+import UserInfo from '../views/UserInfo.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
   // 目前只有login和rigister页面可以不登陆而访问
-  { path: '/login', name: "login", component: Login, meta: { isPublic: true } }, 
+  { path: '/login', name: "login", component: Login, meta: { isPublic: true } },
   { path: '/register', name: "register", component: Register, meta: { isPublic: true } },
+
   {
     path: '/',
     redirect: '/dashboard',
@@ -29,6 +32,9 @@ const routes = [
       { path: '/subsystems/2', component: System2 },
       { path: '/subsystems/3', component: System3 },
       { path: '/subsystems/4', component: System4 },
+
+      // 访问用户个人中心
+      { path: '/userinfo', name: "login", component: UserInfo },
     ]
   },
 ]

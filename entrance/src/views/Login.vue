@@ -30,8 +30,11 @@
                 >
                 </el-input>
               </el-form-item>
-              <el-form-item label="验证码" prop="input_validcode" size="mini">
-                <el-input v-model="model.input_validcode"></el-input>
+              <el-form-item label="验证码" prop="input_validcode">
+                <el-input
+                  v-model="model.input_validcode"
+                  style="float: left; width: 122px"
+                ></el-input>
                 <valid-code :value.sync="model.true_validcode"></valid-code>
               </el-form-item>
               <el-form-item>
