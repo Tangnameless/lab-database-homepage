@@ -28,7 +28,7 @@
               label-width="100px"
               class="demo-ruleForm"
             >
-              <el-form-item prop="email" label="邮箱">
+              <el-form-item prop="email" label="邮箱" :key="1">
                 <el-input v-model="ruleForm1.email"></el-input>
               </el-form-item>
               <el-form-item>
@@ -48,17 +48,23 @@
               class="demo-ruleForm"
             >
               <!-- el-form中的prop指的是表单域 model 字段，在使用 validate、resetFields 方法的情况下，该属性是必填的 -->
-              <el-form-item label="用户名称" prop="username">
+              <!-- 
+                动态切换el-form-item时
+                使用 v-if条件渲染el-form-item组件，并需要切换不用表单项时，
+                需要在el-form-item组件上添加唯一的key属性值，
+                防止切换后，新的el-form-item组件仍然显示切换前的表单错误验证提示 
+              -->
+              <el-form-item label="用户名称" prop="username" :key="2">
                 <el-input v-model="ruleForm2.username"></el-input>
               </el-form-item>
-              <el-form-item label="密码" prop="pass">
+              <el-form-item label="密码" prop="pass" :key="3">
                 <el-input
                   type="password"
                   v-model="ruleForm2.pass"
                   autocomplete="off"
                 ></el-input>
               </el-form-item>
-              <el-form-item label="确认密码" prop="checkPass">
+              <el-form-item label="确认密码" prop="checkPass" :key="4">
                 <el-input
                   type="password"
                   v-model="ruleForm2.checkPass"
@@ -66,7 +72,7 @@
                 ></el-input>
               </el-form-item>
 
-              <el-form-item label="角色" prop="role">
+              <el-form-item label="角色" prop="role" :key="5">
                 <el-select
                   v-model="ruleForm2.role"
                   placeholder="请选择注册用户的角色"
