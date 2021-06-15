@@ -21,18 +21,18 @@
             <el-form
               v-if="active == 0"
               status-icon
-              :model="ruleForm"
-              :rules="rules"
-              ref="ruleEmail"
+              :model="ruleForm1"
+              :rules="rules1"
+              ref="ruleForm1"
               :inline="true"
               label-width="100px"
               class="demo-ruleForm"
             >
               <el-form-item prop="email" label="邮箱">
-                <el-input v-model="ruleForm.email"></el-input>
+                <el-input v-model="ruleForm1.email"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="validEmail('ruleEmail')"
+                <el-button type="primary" @click="validEmail('ruleForm1')"
                   >验证邮箱</el-button
                 >
               </el-form-item>
@@ -41,34 +41,34 @@
             <el-form
               v-if="active == 1"
               status-icon
-              :model="ruleForm"
-              :rules="rules"
-              ref="ruleForm"
+              :model="ruleForm2"
+              :rules="rules2"
+              ref="ruleForm2"
               label-width="100px"
               class="demo-ruleForm"
             >
               <!-- el-form中的prop指的是表单域 model 字段，在使用 validate、resetFields 方法的情况下，该属性是必填的 -->
               <el-form-item label="用户名称" prop="username">
-                <el-input v-model="ruleForm.username"></el-input>
+                <el-input v-model="ruleForm2.username"></el-input>
               </el-form-item>
               <el-form-item label="密码" prop="pass">
                 <el-input
                   type="password"
-                  v-model="ruleForm.pass"
+                  v-model="ruleForm2.pass"
                   autocomplete="off"
                 ></el-input>
               </el-form-item>
               <el-form-item label="确认密码" prop="checkPass">
                 <el-input
                   type="password"
-                  v-model="ruleForm.checkPass"
+                  v-model="ruleForm2.checkPass"
                   autocomplete="off"
                 ></el-input>
               </el-form-item>
 
               <el-form-item label="角色" prop="role">
                 <el-select
-                  v-model="ruleForm.role"
+                  v-model="ruleForm2.role"
                   placeholder="请选择注册用户的角色"
                 >
                   <el-option label="管理员" value="signup id 1"></el-option>
@@ -78,10 +78,10 @@
                 </el-select>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="submitForm('ruleForm')"
+                <el-button type="primary" @click="submitForm('ruleForm2')"
                   >立即注册</el-button
                 >
-                <el-button @click="resetForm('ruleForm')">重置</el-button>
+                <el-button @click="resetForm('ruleForm2')">重置</el-button>
               </el-form-item>
             </el-form>
             <el-divider></el-divider>
@@ -114,8 +114,8 @@ export default {
       if (value === "") {
         callback(new Error("请输入密码"));
       } else {
-        if (this.ruleForm.checkPass !== "") {
-          this.$refs.ruleForm.validateField("checkPass");
+        if (this.ruleForm2.checkPass !== "") {
+          this.$refs.ruleForm2.validateField("checkPass");
         }
         callback();
       }
@@ -124,7 +124,7 @@ export default {
     var validatePass2 = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请再次输入密码"));
-      } else if (value !== this.ruleForm.pass) {
+      } else if (value !== this.ruleForm2.pass) {
         callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
@@ -133,23 +133,16 @@ export default {
 
     return {
       active: 0, // 用来控制处于第几个step和相应的表单显示
-      ruleForm: {
-        username: "",
+      ruleForm1: {
         email: "",
+      },
+      ruleForm2: {
+        username: "",
         pass: "",
         checkPass: "",
         role: "",
       },
-      rules: {
-        username: [
-          { required: true, message: "请输入用户名称", trigger: "blur" },
-          {
-            min: 3,
-            max: 10,
-            message: "长度在 3 到 10 个字符",
-            trigger: "blur",
-          },
-        ],
+      rules1: {
         email: [
           {
             // required: true,
@@ -160,6 +153,17 @@ export default {
             type: "email",
             message: "请输入正确的邮箱地址",
             trigger: ["blur", "change"],
+          },
+        ],
+      },
+      rules2: {
+        username: [
+          { required: true, message: "请输入用户名称", trigger: "blur" },
+          {
+            min: 3,
+            max: 10,
+            message: "长度在 3 到 10 个字符",
+            trigger: "blur",
           },
         ],
         pass: [{ validator: validatePass1, trigger: "blur" }],
@@ -209,9 +213,9 @@ export default {
     async register() {
       // 根据ZAS接口使用，用户名与密码, 与signupID存放在headers中
       let info = {
-        username: this.ruleForm.username,
-        password: this.ruleForm.pass,
-        signupId: this.ruleForm.role,
+        username: this.ruleForm2.username,
+        password: this.ruleForm2.pass,
+        signupId: this.ruleForm2.role,
       };
       await this.$http.post("/auth/signup", undefined, { headers: info });
       this.$message({
