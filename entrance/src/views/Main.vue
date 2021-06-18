@@ -79,8 +79,7 @@ export default {
     async fetchUser() {
       var token = localStorage.token;
       token = String(token).split(" ").pop();
-      console.log(token);
-
+      
       this.$http
         .get(`/token/username/${token}`)
         .then((res) => {

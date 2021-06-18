@@ -1,34 +1,29 @@
 <template>
-  <el-card style="margin-bottom:20px;">
+  <el-card style="margin-bottom: 20px">
     <div slot="header" class="clearfix">
       <span>About me</span>
     </div>
 
     <div class="user-profile">
       <div class="box-center">
-        <pan-thumb :image="user.avatar" :height="'100px'" :width="'100px'" :hoverable="false">
-          <div>Hello</div>
-          {{ user.role }}
-        </pan-thumb>
-      </div>
-      <div class="box-center">
-        <div class="user-name text-center">{{ user.name }}</div>
-        <div class="user-role text-center text-muted">{{ user.role | uppercaseFirst }}</div>
+        {{ user.name }}
       </div>
     </div>
 
     <div class="user-bio">
       <div class="user-education user-bio-section">
-        <div class="user-bio-section-header"><svg-icon icon-class="education" /><span>Education</span></div>
+        <div class="user-bio-section-header">
+          <svg-icon icon-class="education" /><span>教育经历</span>
+        </div>
         <div class="user-bio-section-body">
-          <div class="text-muted">
-            JS in Computer Science from the University of Technology
-          </div>
+          <div class="text-muted">北京邮电大学</div>
         </div>
       </div>
 
       <div class="user-skills user-bio-section">
-        <div class="user-bio-section-header"><svg-icon icon-class="skill" /><span>Skills</span></div>
+        <div class="user-bio-section-header">
+          <svg-icon icon-class="skill" /><span>Skills</span>
+        </div>
         <div class="user-bio-section-body">
           <div class="progress-item">
             <span>Vue</span>
@@ -53,24 +48,20 @@
 </template>
 
 <script>
-import PanThumb from '@/components/PanThumb'
-
 export default {
-  components: { PanThumb },
   props: {
     user: {
       type: Object,
       default: () => {
         return {
-          name: '',
-          email: '',
-          avatar: '',
-          role: ''
-        }
-      }
-    }
-  }
-}
+          name: "",
+          email: "",
+          role: "",
+        };
+      },
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

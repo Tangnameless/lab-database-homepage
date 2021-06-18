@@ -14,32 +14,12 @@
               >
             </div>
             <el-steps :active="active" finish-status="success" align-center>
-              <el-step title="邮箱验证"></el-step>
               <el-step title="注册信息"></el-step>
+              <el-step title="邮箱验证"></el-step>
             </el-steps>
-            <!-- 邮箱验证表单 -->
-            <el-form
-              v-if="active == 0"
-              status-icon
-              :model="ruleForm1"
-              :rules="rules1"
-              ref="ruleForm1"
-              :inline="true"
-              label-width="100px"
-              class="demo-ruleForm"
-            >
-              <el-form-item prop="email" label="邮箱" :key="1">
-                <el-input v-model="ruleForm1.email"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" @click="validEmail('ruleForm1')"
-                  >验证邮箱</el-button
-                >
-              </el-form-item>
-            </el-form>
             <!-- 注册信息表单 -->
             <el-form
-              v-if="active == 1"
+              v-if="active == 0"
               status-icon
               :model="ruleForm2"
               :rules="rules2"
@@ -77,9 +57,14 @@
                   v-model="ruleForm2.role"
                   placeholder="请选择注册用户的角色"
                 >
-                  <el-option label="学生" value="93b6a64d-2878-4f9c-be67-0bcc0cde08ae"></el-option>
-                  <el-option label="教师" value="1e1beaed-e374-4c4c-8244-7d521ee6fb40"></el-option>
-                  <el-option label="咱不可用" value=""></el-option>
+                  <el-option
+                    label="学生"
+                    value="93b6a64d-2878-4f9c-be67-0bcc0cde08ae"
+                  ></el-option>
+                  <el-option
+                    label="教师"
+                    value="1e1beaed-e374-4c4c-8244-7d521ee6fb40"
+                  ></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item>
@@ -87,6 +72,26 @@
                   >立即注册</el-button
                 >
                 <el-button @click="resetForm('ruleForm2')">重置</el-button>
+              </el-form-item>
+            </el-form>
+            <!-- 邮箱验证表单 -->
+            <el-form
+              v-if="active == 1"
+              status-icon
+              :model="ruleForm1"
+              :rules="rules1"
+              ref="ruleForm1"
+              :inline="true"
+              label-width="100px"
+              class="demo-ruleForm"
+            >
+              <el-form-item prop="email" label="邮箱" :key="1">
+                <el-input v-model="ruleForm1.email"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="validEmail('ruleForm1')"
+                  >验证邮箱</el-button
+                >
               </el-form-item>
             </el-form>
             <el-divider></el-divider>
@@ -106,10 +111,11 @@
 
 <script>
 // 注册流程
-// step1：
-// 进行邮箱验证，可以跳过，然后在个人中心完成邮箱验证
-// step2:
+// step1:
 // 填写注册信息，并提交
+// step2：
+// 进行邮箱验证
+// 可以跳过，然后在个人中心完成邮箱验证
 // step3:
 // 返回登陆页面
 
@@ -138,6 +144,7 @@ export default {
 
     return {
       active: 0, // 用来控制处于第几个step和相应的表单显示
+      isRegisted: 0, // 用来表示是否已经注册
       ruleForm1: {
         email: "",
       },
@@ -150,7 +157,7 @@ export default {
       rules1: {
         email: [
           {
-            // required: true,
+            required: true,
             message: "请输入邮箱地址",
             trigger: "blur",
           },
@@ -166,8 +173,8 @@ export default {
           { required: true, message: "请输入用户名称", trigger: "blur" },
           {
             min: 3,
-            max: 10,
-            message: "长度在 3 到 10 个字符",
+            max: 20,
+            message: "长度在 3 到 20 个字符",
             trigger: "blur",
           },
         ],
@@ -180,10 +187,11 @@ export default {
     };
   },
   methods: {
+    // 验证邮箱
     validEmail(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          // 前端成功验证数据格式，发送后端注册接口
+          // 前端成功验证数据格式，发送后端接口
           alert("submit!");
           this.sendEmail();
         } else {
@@ -195,6 +203,8 @@ export default {
         }
       });
     },
+
+    // 提交注册信息表单
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -210,17 +220,38 @@ export default {
         }
       });
     },
+
+    // 重置表单信息
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
+
     // 根据ZAS接口使用, 验证邮箱
     // 向指定邮箱发送验证邮件
     // 如果邮箱已被注册验证，则返回EXIST,否则PASS
     async sendEmail() {
       let email = this.ruleForm1.email;
       let username = this.ruleForm2.username;
-      await this.$http.post(`/email/send?email=${email}&username=${username}`);
+      if (email != "" && username != "") {
+        const res = await this.$http.post(
+          `/email/send?email=${email}&username=${username}`
+        );
+        if (res.data.result == "PASS") {
+          this.$message({
+            type: "success",
+            message: "验证邮件已发出，请注意查收！",
+          });
+          // 3s后，跳转回登录页面
+          setTimeout(() => this.$router.push("/login"), 3000);
+        } else if (res.data.result == "EXIST") {
+          this.$message({
+            type: "error",
+            message: "邮箱已被注册",
+          });
+        }
+      }
     },
+
     async register() {
       // 根据ZAS接口使用，用户名与密码, 与signupID存放在headers中
       let info = {
@@ -233,8 +264,7 @@ export default {
         type: "success",
         message: "注册成功！",
       });
-      // 跳转回登录页面
-      this.$router.push("/login");
+      this.isRegisted = 1;
     },
 
     // 处理el-link中的点击，跳转回登录页面
@@ -244,7 +274,14 @@ export default {
 
     // 控制step前进
     next() {
-      if (this.active++ >= 2) this.active = 2;
+      if (this.isRegisted === 0) {
+        this.$message({
+          type: "warning",
+          message: "请先完成注册！",
+        });
+      } else {
+        if (this.active++ >= 2) this.active = 2;
+      }
     },
     // 控制step后退
     back() {
