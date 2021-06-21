@@ -17,3 +17,8 @@ password: "123456"
 
 ### 根据token返回用户名
 GET {{url}}/token/username/eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiW10iLCJleHAiOjE2MjQzNjY0MzMsImlhdCI6MTYyMzc2MTYzMywidXNlcm5hbWUiOiJ0ZXN0MiJ9.nOYdEXs2Mhz3T-2UUFzZ50pdmR2tWJjjwa-I6LY9mFE
+
+
+### 验证邮箱
+GET {{url}}/email/isChecked/1835379365@qq.com
+

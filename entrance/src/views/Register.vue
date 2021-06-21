@@ -7,6 +7,7 @@
             <div slot="header" class="clearfix">
               <span>用户注册</span>
               <el-link
+                v-if="active == 0"
                 class="login-link"
                 @click="handleClick"
                 style="float: right; padding: 3px 0"
@@ -100,6 +101,12 @@
             >
             <el-button v-if="active == 0" style="margin-top: 12px" @click="next"
               >下一步</el-button
+            >
+            <el-button
+              v-if="active == 1"
+              style="margin-top: 12px"
+              @click="handleClick"
+              >稍后再进行验证</el-button
             >
           </el-card>
         </div>
@@ -282,6 +289,7 @@ export default {
       } else {
         if (this.active++ >= 2) this.active = 2;
       }
+      // if (this.active++ >= 2) this.active = 2;
     },
     // 控制step后退
     back() {

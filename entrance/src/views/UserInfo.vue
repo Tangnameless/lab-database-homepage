@@ -49,6 +49,7 @@ export default {
   methods: {
     async getUser() {
       // 目前只有请求用户名这一个接口
+      // 应该能根据token获取完整的用户数据
       var token = localStorage.token;
       token = String(token).split(" ").pop();
     const res = await this.$http.get(`/token/username/${token}`);
